@@ -8,6 +8,8 @@ A lightweight iOS library for In-App Purchases.
 
 RMStore adds [blocks](#storekit-with-blocks) and [notifications](#notifications) to StoreKit, plus [receipt verification](#receipt-verification), [content downloads](#downloading-content) and [transaction persistence](#transaction-persistence). All in one class without external dependencies. Purchasing a product is as simple as:
 
+RMStore 添加了 blocks 和 通知 为 StoreKit，加上收据验证，内容下载 和 持久交易。所有都在一个类中，不需要外部类库。 购买的例子：
+
 ```objective-c
 [[RMStore defaultStore] addPayment:productID success:^(SKPaymentTransaction *transaction) {
     NSLog(@"Purchased!");
@@ -32,7 +34,9 @@ Check out the [wiki](https://github.com/robotmedia/RMStore/wiki/Installation) fo
 
 RMStore adds blocks to all asynchronous StoreKit operations.
 
-###Requesting products
+RMStore 添加 blocks 为所有的异步StoreKit操作。
+
+###Requesting products 请求产品
 
 ```objective-c
 NSSet *products = [NSSet setWithArray:@[@"fabulousIdol", @"rootBeer", @"rubberChicken"]];
@@ -43,7 +47,7 @@ NSSet *products = [NSSet setWithArray:@[@"fabulousIdol", @"rootBeer", @"rubberCh
 }];
 ```
 
-###Add payment
+###Add payment 增加支付
 
 ```objective-c
 [[RMStore defaultStore] addPayment:@"waxLips" success:^(SKPaymentTransaction *transaction) {
@@ -53,7 +57,7 @@ NSSet *products = [NSSet setWithArray:@[@"fabulousIdol", @"rootBeer", @"rubberCh
 }];
 ```
 
-###Restore transactions
+###Restore transactions 恢复交易
 
 ```objective-c
 [[RMStore defaultStore] restoreTransactionsOnSuccess:^(NSArray *transactions){
@@ -63,7 +67,7 @@ NSSet *products = [NSSet setWithArray:@[@"fabulousIdol", @"rootBeer", @"rubberCh
 }];
 ```
 
-###Refresh receipt (iOS 7+ only)
+###Refresh receipt (iOS 7+ only) 刷新收据
 
 ```objective-c
 [[RMStore defaultStore] refreshReceiptOnSuccess:^{
@@ -77,7 +81,10 @@ NSSet *products = [NSSet setWithArray:@[@"fabulousIdol", @"rootBeer", @"rubberCh
 
 RMStore sends notifications of StoreKit related events and extends `NSNotification` to provide relevant information. To receive them, implement the desired methods of the `RMStoreObserver` protocol and add the observer to `RMStore`.
 
-###Adding and removing the observer
+RMStore 发送StoreKit的相关通知，并扩展了通知，提供足够的信息。接收的话，需要实现“RMStoreObserver”协议的方法，并添加观察者“RMStore”。
+
+###Adding and removing the observer 添加和移除观察者
+
 
 ```objective-c
 [[RMStore defaultStore] addStoreObserver:self];
@@ -85,7 +92,7 @@ RMStore sends notifications of StoreKit related events and extends `NSNotificati
 [[RMStore defaultStore] removeStoreObserver:self];
 ```
 
-###Products request notifications
+###Products request notifications 产品请求通知
 
 ```objective-c
 - (void)storeProductsRequestFailed:(NSNotification*)notification
@@ -100,7 +107,7 @@ RMStore sends notifications of StoreKit related events and extends `NSNotificati
 }
 ```
 
-###Payment transaction notifications
+###Payment transaction notifications 支付交易通知
 
 Payment transaction notifications are sent after a payment has been requested or for each restored transaction.
 
@@ -127,7 +134,7 @@ Payment transaction notifications are sent after a payment has been requested or
 }
 ```
 
-###Restore transactions notifications
+###Restore transactions notifications 恢复交易通知
 
 ```objective-c
 - (void)storeRestoreTransactionsFailed:(NSNotification*)notification;
@@ -141,7 +148,7 @@ Payment transaction notifications are sent after a payment has been requested or
 }
 ```
 
-###Download notifications (iOS 6+ only)
+###Download notifications (iOS 6+ only) 下载通知
 
 For Apple-hosted and self-hosted downloads:
 
@@ -170,7 +177,7 @@ For Apple-hosted and self-hosted downloads:
 }
 ```
 
-Only for Apple-hosted downloads:
+Only for Apple-hosted downloads: 苹果托管下载
 
 ```objective-c
 - (void)storeDownloadCanceled:(NSNotification*)notification
@@ -188,7 +195,7 @@ Only for Apple-hosted downloads:
 }
 ```
 
-###Refresh receipt notifications (iOS 7+ only)
+###Refresh receipt notifications (iOS 7+ only) 刷新收据通知
 
 ```objective-c
 - (void)storeRefreshReceiptFailed:(NSNotification*)notification;
@@ -199,13 +206,17 @@ Only for Apple-hosted downloads:
 - (void)storeRefreshReceiptFinished:(NSNotification*)notification { }
 ```
 
-##Receipt verification
+##Receipt verification 收据验证
 
 RMStore doesn't perform receipt verification by default but provides reference implementations. You can implement your own custom verification or use the reference verifiers provided by the library.
 
+RMSTART默认不执行收据验证，但提供参考实现。您可以实现自己的自定义验证或使用库提供的引用验证器。
+
 Both options are outlined below. For more info, check out the [wiki](https://github.com/robotmedia/RMStore/wiki/Receipt-verification).
 
-###Reference verifiers
+这两个选项概述如下。有关更多信息，请查看 [wiki](https://github.com/robotmedia/RMStore/wiki/Receipt-verification).
+
+###Reference verifiers 参考验证
 
 RMStore provides receipt verification via `RMStoreAppReceiptVerifier` (for iOS 7 or higher) and `RMStoreTransactionReceiptVerifier` (for iOS 6 or lower). To use any of them, add the corresponding files from [RMStore/Optional](https://github.com/robotmedia/RMStore/tree/master/RMStore/Optional) into your project and set the verifier delegate (`receiptVerifier`) at startup. For example:
 
@@ -222,7 +233,7 @@ RMStore provides receipt verification via `RMStoreAppReceiptVerifier` (for iOS 7
 
 If security is a concern you might want to avoid using an open source verification logic, and provide your own custom verifier instead.
 
-###Custom verifier
+###Custom verifier 自定义验证器
 
 RMStore delegates receipt verification, enabling you to provide your own implementation using  the `RMStoreReceiptVerifier` protocol:
 
@@ -259,7 +270,7 @@ RMStore delegates the downloading of self-hosted content via the optional `conte
 
 Call `successBlock` if the download is successful, `failureBlock` if it isn't and `progressBlock` to notify the download progress. RMStore will consider that a transaction has finished or failed only after the content downloader delegate has successfully or unsuccessfully downloaded its content.
 
-##Transaction persistence
+##Transaction persistence 事务持久性
 
 RMStore delegates transaction persistence and provides two optional reference implementations for storing transactions in the Keychain or in `NSUserDefaults`. You can implement your transaction, use the reference implementations provided by the library or, in the case of non-consumables and auto-renewable subscriptions, get the transactions directly from the receipt.
 
